@@ -12,7 +12,7 @@ Desenvolvimento Web III — HelpDesk Web
 
 A atividade será uma evolução do projeto HelpDesk Web desenvolvido em aula. Atualmente, o sistema já possui uma SPA em JavaScript, um array de chamados com id, titulo, descricao, prioridade e status, além das telas de Dashboard, listagem de chamados e cadastro de novo chamado. app
 
-Na tela de chamados, o projeto atualmente apresenta apenas ID, Título, Prioridade e Status. app O objetivo agora é fazer com que os alunos evoluam o projeto existente, trabalhando manipulação de arrays, objetos, funções, eventos, DOM, Bootstrap e regras de negócio. Isso também prepara o projeto para as próximas etapas de Desenvolvimento Web III, cujo PPC prevê desenvolvimento de aplicações web, back-end, arquitetura e versionamento. PPC_DSM_FrancodaRocha_extensao_…
+Na tela de chamados, o projeto atualmente apresenta apenas ID, Título, Prioridade e Status. app O objetivo agora é fazer com que os alunos evoluam o projeto existente, trabalhando manipulação de arrays, objetos, funções, eventos, DOM, Bootstrap e regras de negócio. Isso também prepara o projeto para as próximas etapas de Desenvolvimento Web III, cujo PPC prevê desenvolvimento de aplicações web, back-end, arquitetura e versionamento. PPC*DSM_FrancodaRocha_extensao*…
 
 Atividades obrigatórias
 

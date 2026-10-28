@@ -2,267 +2,279 @@
 // AULA 02 - SPA COM JAVASCRIPT PURO
 // ======================================================================
 
-// Array com dados temporários.
-// Eles existem apenas enquanto a página está aberta.
-const chamados = [
-    {
-        // Identificador único deste exemplo.
-        id: 1,
-
-        // Título curto.
-        titulo: "Computador não liga",
-
-        // Descrição detalhada.
-        descricao: "O computador não apresenta sinal de energia.",
-
-        // Prioridade do atendimento.
-        prioridade: "Alta",
-
-        // Situação atual.
-        status: "Aberto"
-    },
-    {
-        id: 2,
-        titulo: "Senha bloqueada",
-        descricao: "Usuário não consegue acessar o sistema.",
-        prioridade: "Média",
-        status: "Em atendimento"
-    },
-    {
-        // Identificador único deste exemplo.
-        id: 3,
-
-        // Título curto.
-        titulo: "notebook não liga",
-
-        // Descrição detalhada.
-        descricao: "O computador não apresenta sinal de energia.",
-
-        // Prioridade do atendimento.
-        prioridade: "Alta",
-
-        // Situação atual.
-        status: "Encerrado"
-    }
+const prioridadesArray = [
+  { id: "1", nome: "Baixa", classe: "pBaixa" },
+  { id: "2", nome: "Média", classe: "pMedia" },
+  { id: "3", nome: "Alta", classe: "pAlta" },
 ];
 
-// Procura o elemento <div id="app">.
-// Guardaremos a referência para alterar a tela.
+const chamados = [
+  {
+    id: 1,
+    titulo: "Computador não liga",
+    descricao: "O computador não apresenta sinal de energia.",
+    prioridade: "Alta",
+    status: "Aberto",
+  },
+  {
+    id: 2,
+    titulo: "Senha bloqueada",
+    descricao: "Usuário não consegue acessar o sistema.",
+    prioridade: "Média",
+    status: "Em atendimento",
+  },
+  {
+    id: 3,
+    titulo: "notebook não liga",
+    descricao: "O computador não apresenta sinal de energia.",
+    prioridade: "Alta",
+    status: "Encerrado",
+    solucao: "Chamado encerrado anteriormente.",
+  },
+];
+
 const app = document.getElementById("app");
 
-// Função que desenha o Dashboard.
+function obterChamado(id) {
+  return chamados.find((chamado) => chamado.id === Number(id));
+}
+
+function obterClassePrioridade(prioridade) {
+  const prioridadeObjeto = prioridadesArray.find(
+    (item) => item.nome === prioridade,
+  );
+  return prioridadeObjeto ? prioridadeObjeto.classe : "";
+}
+
+function obterClasseStatus(status) {
+  const classes = {
+    Aberto: "statusAberto",
+    "Em atendimento": "statusAtendimento",
+    Encerrado: "statusEncerrado",
+  };
+  return classes[status] || "";
+}
+
 function mostrarDashboard() {
+  const contadores = {
+    total: chamados.length,
+    abertos: chamados.filter((chamado) => chamado.status === "Aberto").length,
+    atendimento: chamados.filter(
+      (chamado) => chamado.status === "Em atendimento",
+    ).length,
+    encerrados: chamados.filter((chamado) => chamado.status === "Encerrado")
+      .length,
+    alta: chamados.filter((chamado) => chamado.prioridade === "Alta").length,
+  };
 
-    // filter cria um novo array com chamados abertos.
-    // length conta quantos existem.
-    const abertos = chamados
-        .filter(chamado => chamado.status === "Aberto")
-        .length;
-
-    // innerHTML substitui o conteúdo da área principal.
-    app.innerHTML = `
-        <h1 class="mb-4">Dashboard</h1>
-
-        <div class="row g-3">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="h5">Total de chamados</h2>
-
-                        <p class="display-6">
-                            ${chamados.length}
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="h5">Abertos</h2>
-
-                        <p class="display-6">
-                            ${abertos}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
+  app.innerHTML = `
+    <h1 class="mb-4">Dashboard</h1>
+    <div class="row g-3">
+      <div class="col-md-4"><div class="card"><div class="card-body">
+        <h2 class="h5">Total de chamados</h2><p class="display-6">${contadores.total}</p>
+      </div></div></div>
+      <div class="col-md-4"><div class="card"><div class="card-body">
+        <h2 class="h5">Chamados abertos</h2><p class="display-6">${contadores.abertos}</p>
+      </div></div></div>
+      <div class="col-md-4"><div class="card"><div class="card-body">
+        <h2 class="h5">Chamados em atendimento</h2><p class="display-6">${contadores.atendimento}</p>
+      </div></div></div>
+      <div class="col-md-4"><div class="card"><div class="card-body">
+        <h2 class="h5">Chamados encerrados</h2><p class="display-6">${contadores.encerrados}</p>
+      </div></div></div>
+      <div class="col-md-4"><div class="card"><div class="card-body">
+        <h2 class="h5">Chamados de prioridade Alta</h2><p class="display-6">${contadores.alta}</p>
+      </div></div></div>
+    </div>
+  `;
 }
 
-// Função que desenha a listagem.
 function mostrarChamados() {
-
-    app.innerHTML = `
-        <h1 class="mb-4">Chamados</h1>
-
-        <div class="table-responsive">
-            <table class="table table-striped align-middle">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Título</th>
-                        <th>Prioridade</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody>
+  app.innerHTML = `
+    <h1 class="mb-4">Chamados</h1>
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead><tr>
+          <th class="text-center">ID</th>
+          <th class="text-center">Título</th>
+          <th class="text-center">Prioridade</th>
+          <th class="text-center">Status</th>
+          <th class="text-center">Ações</th>
+        </tr></thead>
+        <tbody class="text-center">
+          ${chamados
+            .map(
+              (chamado) => `
+                <tr>
+                  <td>${chamado.id}</td>
+                  <td>${chamado.titulo}</td>
+                  <td><span class="badge ${obterClassePrioridade(chamado.prioridade)}">${chamado.prioridade}</span></td>
+                  <td><span class="badge ${obterClasseStatus(chamado.status)}">${chamado.status}</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary me-1" data-acao="visualizar" data-id="${chamado.id}">Visualizar</button>
                     ${
-                        // map transforma cada objeto em uma linha HTML.
-                        chamados.map(chamado => `
-                            <tr>
-                                <td>${chamado.id}</td>
-                                <td>${chamado.titulo}</td>
-                                <td>${chamado.prioridade}</td>
-                                <td>${chamado.status}</td>
-                            </tr>
-                        `)
-                        // join une todas as linhas sem vírgula.
-                        .join("")
+                      chamado.status !== "Encerrado"
+                        ? `<button class="btn btn-sm btn-outline-danger" data-acao="encerrar" data-id="${chamado.id}">Encerrar chamado</button>`
+                        : ""
                     }
-                </tbody>
-            </table>
-        </div>
-    `;
+                  </td>
+                </tr>
+              `,
+            )
+            .join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
 }
 
-// Função que desenha o formulário.
 function mostrarNovoChamado() {
-
-    app.innerHTML = `
-        <h1 class="mb-4">Novo chamado</h1>
-
-        <form id="formChamado">
-            <div class="mb-3">
-                <label class="form-label" for="titulo">
-                    Título
-                </label>
-
-                <input
-                    class="form-control"
-                    id="titulo"
-                    required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="descricao">
-                    Descrição
-                </label>
-
-                <textarea
-                    class="form-control"
-                    id="descricao"
-                    rows="4">
-                </textarea>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="prioridade">
-                    Prioridade
-                </label>
-
-                <select class="form-select" id="prioridade" required>
-                    <option value="">Selecione</option>
-                    <option id="1">Baixa</option>
-                    <option id="2">Média</option>
-                    <option id="3">Alta</option>
-                </select>
-            </div>
-
-            <button class="btn btn-success" type="submit">
-                Cadastrar
-            </button>
-        </form>
-    `;
-
-    // Procura o formulário que acabou de ser criado.
-    const formulario = document.getElementById("formChamado");
-
-    // Escuta o envio do formulário.
-    formulario.addEventListener("submit", cadastrarChamado);
+  app.innerHTML = `
+    <h1 class="mb-4">Novo chamado</h1>
+    <form id="formChamado">
+      <div class="mb-3">
+        <label class="form-label" for="titulo">Título</label>
+        <input class="form-control" id="titulo" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="descricao">Descrição</label>
+        <textarea class="form-control" id="descricao" rows="4" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="prioridade">Prioridade</label>
+        <select class="form-select" id="prioridade" required>
+          <option value="">Selecione</option>
+          ${prioridadesArray
+            .map(
+              (prioridade) =>
+                `<option value="${prioridade.id}">${prioridade.nome}</option>`,
+            )
+            .join("")}
+        </select>
+      </div>
+      <button class="btn btn-success" type="submit">Cadastrar</button>
+    </form>
+  `;
+  document
+    .getElementById("formChamado")
+    .addEventListener("submit", cadastrarChamado);
 }
 
-// Função executada no submit.
 function cadastrarChamado(evento) {
+  evento.preventDefault();
+  const prioridadeObjeto = prioridadesArray.find(
+    (prioridade) =>
+      prioridade.id === document.getElementById("prioridade").value,
+  );
 
-    // Seleciono e separo as prioridades por id
-    const idprioridade = document.getElementById("prioridade").value
+  if (!prioridadeObjeto) {
+    return;
+  }
 
-    // Função interna para definir a classe de estilo com base na prioridade
-    let classeCor = "";
-    switch (idprioridade) {
-        case "1":
-            classeCor = "card-baixa"; // Classe para prioridade Baixa
-            break;
-        case "2":
-            classeCor = "card-media"; // Classe para prioridade Média
-            break;
-        case "3":
-            classeCor = "card-alta";  // Classe para prioridade Alta
-            break;
-        default:
-            classeCor = "card-padrao";
-    }
-
-    // Impede o navegador de recarregar a página.
-    evento.preventDefault();
-
-    // push adiciona um novo objeto no array.
-    chamados.push({
-        // ID simplificado para aula.
-        id: chamados.length + 1,
-
-        // Lê o valor do campo título.
-        titulo: document.getElementById("titulo").value,
-
-        // Lê o valor da descrição.
-        descricao: document.getElementById("descricao").value,
-
-       // Lê o ID selecionado ("1", "2" ou "3").
-        prioridade: idrioridade,
-
-        // Guarda a classe de cor para usar na renderização da tela.
-        classeEstilo: classeCor,
-
-        // Novo chamado começa aberto.
-        status: "Aberto"
-    });
-
-    // Depois do cadastro, mostra a lista.
-    mostrarChamados();
+  chamados.push({
+    id: chamados.length
+      ? Math.max(...chamados.map((chamado) => chamado.id)) + 1
+      : 1,
+    titulo: document.getElementById("titulo").value.trim(),
+    descricao: document.getElementById("descricao").value.trim(),
+    prioridade: prioridadeObjeto.nome,
+    status: "Aberto",
+  });
+  mostrarChamados();
 }
 
-// Seleciona todos os elementos que têm data-view.
-const links = document.querySelectorAll("[data-view]");
+function mostrarDetalhes(id) {
+  const chamado = obterChamado(id);
+  if (!chamado) {
+    mostrarChamados();
+    return;
+  }
 
-// Percorre os links.
-links.forEach(link => {
+  app.innerHTML = `
+    <h1 class="mb-4">Detalhes do chamado #${chamado.id}</h1>
+    <dl class="row">
+      <dt class="col-sm-3">Título</dt><dd class="col-sm-9">${chamado.titulo}</dd>
+      <dt class="col-sm-3">Descrição</dt><dd class="col-sm-9">${chamado.descricao}</dd>
+      <dt class="col-sm-3">Prioridade</dt><dd class="col-sm-9"><span class="badge ${obterClassePrioridade(chamado.prioridade)}">${chamado.prioridade}</span></dd>
+      <dt class="col-sm-3">Status</dt><dd class="col-sm-9"><span class="badge ${obterClasseStatus(chamado.status)}">${chamado.status}</span></dd>
+      ${
+        chamado.status === "Encerrado"
+          ? `<dt class="col-sm-3">Solução realizada</dt><dd class="col-sm-9">${chamado.solucao || "Não informada."}</dd>`
+          : ""
+      }
+    </dl>
+    <button class="btn btn-secondary" data-acao="voltar">Voltar</button>
+  `;
+}
 
-    // Escuta clique.
-    link.addEventListener("click", evento => {
+function mostrarEncerramento(id) {
+  const chamado = obterChamado(id);
+  if (!chamado || chamado.status === "Encerrado") {
+    mostrarChamados();
+    return;
+  }
 
-        // Impede navegação padrão.
-        evento.preventDefault();
+  app.innerHTML = `
+    <h1 class="mb-4">Encerrar chamado #${chamado.id}</h1>
+    <p><strong>Título:</strong> ${chamado.titulo}</p>
+    <p><strong>Descrição:</strong> ${chamado.descricao}</p>
+    <p><strong>Prioridade:</strong> ${chamado.prioridade}</p>
+    <p><strong>Status atual:</strong> ${chamado.status}</p>
+    <form id="formEncerramento">
+      <div class="mb-3">
+        <label class="form-label" for="solucao">Solução realizada</label>
+        <textarea class="form-control" id="solucao" rows="4" required></textarea>
+        <div id="mensagemSolucao" class="invalid-feedback">Informe o que foi realizado antes de encerrar o chamado.</div>
+      </div>
+      <button class="btn btn-danger" type="submit">Confirmar encerramento</button>
+      <button class="btn btn-secondary" type="button" data-acao="voltar">Cancelar</button>
+    </form>
+  `;
+  document
+    .getElementById("formEncerramento")
+    .addEventListener("submit", (evento) => encerrarChamado(evento, chamado));
+}
 
-        // Lê data-view.
-        const view = link.dataset.view;
+function encerrarChamado(evento, chamado) {
+  evento.preventDefault();
+  const campoSolucao = document.getElementById("solucao");
+  const solucao = campoSolucao.value.trim();
 
-        // Decide qual "tela" mostrar.
-        if (view === "dashboard") {
-            mostrarDashboard();
-        }
+  if (!solucao) {
+    campoSolucao.classList.add("is-invalid");
+    campoSolucao.focus();
+    return;
+  }
 
-        if (view === "chamados") {
-            mostrarChamados();
-        }
+  chamado.solucao = solucao;
+  chamado.status = "Encerrado";
+  mostrarChamados();
+}
 
-        if (view === "novo") {
-            mostrarNovoChamado();
-        }
-    });
+app.addEventListener("click", (evento) => {
+  const elemento = evento.target.closest("[data-acao]");
+  if (!elemento) {
+    return;
+  }
+
+  const acao = elemento.dataset.acao;
+  if (acao === "visualizar") {
+    mostrarDetalhes(elemento.dataset.id);
+  } else if (acao === "encerrar") {
+    mostrarEncerramento(elemento.dataset.id);
+  } else if (acao === "voltar") {
+    mostrarChamados();
+  }
 });
 
-// Primeira tela.
+document.querySelectorAll("[data-view]").forEach((link) => {
+  link.addEventListener("click", (evento) => {
+    evento.preventDefault();
+    const view = link.dataset.view;
+    if (view === "dashboard") mostrarDashboard();
+    if (view === "chamados") mostrarChamados();
+    if (view === "novo") mostrarNovoChamado();
+  });
+});
+
 mostrarDashboard();
